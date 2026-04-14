@@ -1,3 +1,5 @@
+import pytest
+
 from app.models.calculation import Calculation, CalculationType
 
 
@@ -21,10 +23,10 @@ def test_calculation_model_user_id_has_foreign_key_to_users() -> None:
 
 
 def test_calculation_model_computed_result_for_supported_operations() -> None:
-    add_calc = Calculation(a=10, b=5, type=CalculationType.add.value)
-    subtract_calc = Calculation(a=10, b=5, type=CalculationType.subtract.value)
-    multiply_calc = Calculation(a=10, b=5, type=CalculationType.multiply.value)
-    divide_calc = Calculation(a=10, b=5, type=CalculationType.divide.value)
+    add_calc = Calculation(a=10, b=5, type=CalculationType.ADD.value)
+    subtract_calc = Calculation(a=10, b=5, type=CalculationType.SUB.value)
+    multiply_calc = Calculation(a=10, b=5, type=CalculationType.MULTIPLY.value)
+    divide_calc = Calculation(a=10, b=5, type=CalculationType.DIVIDE.value)
 
     assert add_calc.computed_result == 15
     assert subtract_calc.computed_result == 5
@@ -33,6 +35,13 @@ def test_calculation_model_computed_result_for_supported_operations() -> None:
 
 
 def test_calculation_model_resolved_result_prefers_stored_result() -> None:
-    calc = Calculation(a=10, b=5, type=CalculationType.add.value, result=999)
+    calc = Calculation(a=10, b=5, type=CalculationType.ADD.value, result=999)
 
     assert calc.resolved_result == 999
+
+
+def test_calculation_model_computed_result_rejects_divide_by_zero() -> None:
+    calc = Calculation(a=10, b=0, type=CalculationType.DIVIDE.value)
+
+    with pytest.raises(ValueError, match="divide by zero"):
+        _ = calc.computed_result

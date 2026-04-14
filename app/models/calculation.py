@@ -10,10 +10,10 @@ from app.operations.factory import CalculationFactory
 class CalculationType(str, Enum):
     """Supported arithmetic operation types."""
 
-    add = "add"
-    subtract = "subtract"
-    multiply = "multiply"
-    divide = "divide"
+    ADD = "Add"
+    SUB = "Sub"
+    MULTIPLY = "Multiply"
+    DIVIDE = "Divide"
 
 
 class Calculation(Base):
@@ -26,11 +26,11 @@ class Calculation(Base):
     __tablename__ = "calculations"
     __table_args__ = (
         CheckConstraint(
-            "type IN ('add', 'subtract', 'multiply', 'divide')",
+            "type IN ('Add', 'Sub', 'Multiply', 'Divide')",
             name="ck_calculations_type_allowed",
         ),
         CheckConstraint(
-            "type != 'divide' OR b != 0",
+            "type != 'Divide' OR b != 0",
             name="ck_calculations_divide_nonzero",
         ),
     )

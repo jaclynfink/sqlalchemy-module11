@@ -6,7 +6,6 @@ import time
 
 import pytest
 import requests
-from playwright.sync_api import sync_playwright
 
 @pytest.fixture(scope='session')
 def fastapi_server():
@@ -54,7 +53,8 @@ def playwright_instance_fixture():
     """
     Fixture to manage Playwright's lifecycle.
     """
-    with sync_playwright() as p:
+    playwright_sync_api = pytest.importorskip("playwright.sync_api")
+    with playwright_sync_api.sync_playwright() as p:
         yield p
 
 @pytest.fixture(scope="session")

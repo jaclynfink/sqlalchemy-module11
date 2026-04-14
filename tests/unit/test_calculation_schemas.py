@@ -43,6 +43,16 @@ def test_calculation_create_accepts_case_insensitive_type_string() -> None:
     assert payload.type == CalculationType.DIVIDE
 
 
+def test_calculation_create_rejects_invalid_type_string() -> None:
+    with pytest.raises(ValidationError):
+        CalculationCreate(a=9, b=3, type="modulo")
+
+
+def test_calculation_create_rejects_non_positive_user_id() -> None:
+    with pytest.raises(ValidationError):
+        CalculationCreate(a=9, b=3, type="add", user_id=0)
+
+
 def test_calculation_read_supports_orm_model_validation() -> None:
     record = _CalculationRecord()
 

@@ -15,10 +15,13 @@ from app.operations.factory import (
         ("add", AddStrategy),
         ("Add", AddStrategy),
         ("sub", SubtractStrategy),
+        ("Sub", SubtractStrategy),
         ("subtract", SubtractStrategy),
         ("multiply", MultiplyStrategy),
+        ("Multiply", MultiplyStrategy),
         ("mul", MultiplyStrategy),
         ("divide", DivideStrategy),
+        ("Divide", DivideStrategy),
         ("div", DivideStrategy),
     ],
 )
