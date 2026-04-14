@@ -74,11 +74,26 @@ Open:
 pytest -q tests/unit
 ```
 
+### New calculation unit tests
+
+Run only the new calculation-focused unit tests (factory, schema validation, and model behavior):
+
+```bash
+pytest -q tests/unit/test_calculation_factory.py tests/unit/test_calculation_model.py tests/unit/test_calculation_schemas.py
+```
+
 ### Integration tests (requires Postgres)
 
 ```bash
 export DATABASE_URL="postgresql+psycopg2://user:password@localhost:5432/myappdb"
 pytest -q tests/integration
+```
+
+### New calculation integration tests (requires Postgres)
+
+```bash
+export DATABASE_URL="postgresql+psycopg2://user:password@localhost:5432/myappdb"
+pytest -q tests/integration/test_calculation_integration.py
 ```
 
 ### Full test suite
