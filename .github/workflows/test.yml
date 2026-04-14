@@ -113,6 +113,6 @@ jobs:
         with:
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/sqlalchemy-module10:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/sqlalchemy-module10:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/sqlalchemy-module11:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/sqlalchemy-module11:${{ github.sha }}
           platforms: linux/amd64,linux/arm64
