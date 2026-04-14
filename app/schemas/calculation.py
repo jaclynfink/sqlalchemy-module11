@@ -1,26 +1,26 @@
 from enum import Enum
 from math import isclose, isfinite
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 
 class CalculationType(str, Enum):
     """Supported arithmetic operation types for API payloads."""
 
-    add = "add"
-    subtract = "subtract"
-    multiply = "multiply"
-    divide = "divide"
+    ADD = "Add"
+    SUB = "Sub"
+    MULTIPLY = "Multiply"
+    DIVIDE = "Divide"
 
 
 def _compute_result(a: float, b: float, calculation_type: CalculationType) -> float:
-    if calculation_type == CalculationType.add:
+    if calculation_type == CalculationType.ADD:
         return a + b
-    if calculation_type == CalculationType.subtract:
+    if calculation_type == CalculationType.SUB:
         return a - b
-    if calculation_type == CalculationType.multiply:
+    if calculation_type == CalculationType.MULTIPLY:
         return a * b
-    if calculation_type == CalculationType.divide:
+    if calculation_type == CalculationType.DIVIDE:
         return a / b
     raise ValueError(f"Unsupported calculation type: {calculation_type}")
 
@@ -32,12 +32,34 @@ class CalculationBase(BaseModel):
     b: float = Field(description="Right operand")
     type: CalculationType
 
+    @field_validator("type", mode="before")
+    @classmethod
+    def normalize_type(cls, value: str | CalculationType) -> CalculationType:
+        if isinstance(value, CalculationType):
+            return value
+        if not isinstance(value, str):
+            raise TypeError("type must be a string or CalculationType enum value.")
+
+        mapping = {
+            "add": CalculationType.ADD,
+            "sub": CalculationType.SUB,
+            "subtract": CalculationType.SUB,
+            "multiply": CalculationType.MULTIPLY,
+            "mul": CalculationType.MULTIPLY,
+            "divide": CalculationType.DIVIDE,
+            "div": CalculationType.DIVIDE,
+        }
+        normalized = mapping.get(value.strip().lower())
+        if normalized is None:
+            raise ValueError("type must be one of: Add, Sub, Multiply, Divide.")
+        return normalized
+
     @model_validator(mode="after")
     def validate_operands(self) -> "CalculationBase":
         if not isfinite(self.a) or not isfinite(self.b):
             raise ValueError("Operands must be finite numbers.")
-        if self.type == CalculationType.divide and self.b == 0:
-            raise ValueError("Division by zero is not allowed for type='divide'.")
+        if self.type == CalculationType.DIVIDE and self.b == 0:
+            raise ValueError("Division by zero is not allowed for type='Divide'.")
         return self
 
 
