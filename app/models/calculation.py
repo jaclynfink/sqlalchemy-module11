@@ -4,6 +4,7 @@ from sqlalchemy import CheckConstraint, Float, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
+from app.operations.factory import CalculationFactory
 
 
 class CalculationType(str, Enum):
@@ -50,17 +51,7 @@ class Calculation(Base):
     @property
     def computed_result(self) -> float:
         """Compute result from `a`, `b`, and `type` when needed."""
-        if self.type == CalculationType.add.value:
-            return self.a + self.b
-        if self.type == CalculationType.subtract.value:
-            return self.a - self.b
-        if self.type == CalculationType.multiply.value:
-            return self.a * self.b
-        if self.type == CalculationType.divide.value:
-            if self.b == 0:
-                raise ValueError("Cannot divide by zero.")
-            return self.a / self.b
-        raise ValueError(f"Unsupported calculation type: {self.type}")
+        return CalculationFactory.calculate(self.type, self.a, self.b)
 
     @property
     def resolved_result(self) -> float:

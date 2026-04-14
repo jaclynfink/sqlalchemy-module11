@@ -20,6 +20,15 @@ to perform arithmetic operations based on user input.
 
 from typing import Union  # Import Union for type hinting multiple possible types
 
+from app.operations.factory import (
+    AddStrategy,
+    CalculationFactory,
+    CalculationStrategy,
+    DivideStrategy,
+    MultiplyStrategy,
+    SubtractStrategy,
+)
+
 # Define a type alias for numbers that can be either int or float
 Number = Union[int, float]
 
@@ -118,3 +127,18 @@ def divide(a: Number, b: Number) -> float:
     # Perform division of a by b and return the result as a float
     result = a / b
     return result
+
+
+__all__ = [
+    "Number",
+    "add",
+    "subtract",
+    "multiply",
+    "divide",
+    "CalculationStrategy",
+    "AddStrategy",
+    "SubtractStrategy",
+    "MultiplyStrategy",
+    "DivideStrategy",
+    "CalculationFactory",
+]
